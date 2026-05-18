@@ -169,7 +169,7 @@ namespace Purchases.Application.Services
         {
             // Retrieve HTML Content for parsing
             var httpClient = _httpClientFactory.CreateClient("Scraper");
-            using var response =
+            var response =
                 await httpClient.GetAsync(url, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
             response.EnsureSuccessStatusCode();
