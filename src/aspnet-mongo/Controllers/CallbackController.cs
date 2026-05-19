@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using Purchases.Domain.Contracts.Services;
-using Purchases.Domain.Models;
 using Telegram.Bot.Types;
 
 namespace aspnet_mongo.Controllers
@@ -51,31 +49,15 @@ namespace aspnet_mongo.Controllers
         }
 
         private async Task TelegramServiceRouter(
-           Message? message,
-           string? providedUrl,
-           CancellationToken cancellationToken)
+            Message? message,
+            string? providedUrl,
+            CancellationToken cancellationToken)
         {
             if (message?.Text != null)
             {
                 var url = message.Text;
                 if (!ValidUrl(url))
                     throw new InvalidOperationException("Invalid URL");
-                
-                // Add receipt (see if needs to move to main receipt service)
-                try
-                {
-                    var receipt = new Receipt { Url = url, Processed = false, ReceivedDate = DateTime.UtcNow };
-                    await _receiptService.CreteAsync(receipt, cancellationToken);
-                }
-                catch (MongoWriteException wexc) when  (wexc.WriteError.Category == ServerErrorCategory.DuplicateKey)
-                {
-                    // Dupplicate record - move on
-                    await Task.Delay(100, cancellationToken);
-                }
-                catch (Exception wexc)
-                {
-                    throw;
-                }
 
                 await _receiptRetrieverService.HandleReceiptUrl(url, message?.Chat.Id ?? default, cancellationToken);
             }
@@ -93,10 +75,10 @@ namespace aspnet_mongo.Controllers
                 return false;
 
             if ((uri.Scheme != "http" && uri.Scheme != "https") ||
-                 uri.Host.Contains("localhost") ||
-                 uri.Host.StartsWith("192.168.") ||
-                 uri.Host.StartsWith("10.") ||
-                 uri.Host == "127.0.0.1")
+                uri.Host.Contains("localhost") ||
+                uri.Host.StartsWith("192.168.") ||
+                uri.Host.StartsWith("10.") ||
+                uri.Host == "127.0.0.1")
                 return false;
 
             return true;

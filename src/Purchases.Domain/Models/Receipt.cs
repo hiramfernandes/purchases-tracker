@@ -17,4 +17,7 @@ public class Receipt
 
     [JsonPropertyName("processed-date")]
     public DateTime? ProcessedDate { get; set; }
+    
+    [JsonPropertyName("processing-message")]
+    public string? ProcessingMessage { get; set; }
 }

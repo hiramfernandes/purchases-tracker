@@ -5,4 +5,6 @@ namespace Purchases.Domain.Contracts.Repos;
 public interface IReceiptRepository
 {
     Task CreateAsync(Receipt newReceipt, CancellationToken cancellationToken);
+    Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken);
+    Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken);
 }

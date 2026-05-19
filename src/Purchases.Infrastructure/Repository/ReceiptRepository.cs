@@ -32,4 +32,22 @@ public class ReceiptRepository : IReceiptRepository
 
         await _receiptsCollection.InsertOneAsync(newReceipt, options, cancellationToken);
     }
+
+    public async Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken)
+    {
+        var receipt = 
+            await _receiptsCollection.FindAsync(
+                receipt => receipt.Url == url, 
+                cancellationToken: cancellationToken);
+        
+        return receipt.FirstOrDefault(cancellationToken);
+    }
+
+    public async Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken)
+    {
+        await _receiptsCollection.ReplaceOneAsync(
+            receipt => receipt.Url == receiptToUpdate.Url, 
+            receiptToUpdate, 
+            cancellationToken: cancellationToken);
+    }
 }
