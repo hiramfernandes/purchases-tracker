@@ -6,5 +6,6 @@ public interface IReceiptService
 {
     Task CreteAsync(string url, CancellationToken cancellationToken);
     Task<Receipt> GetByIdAsync(string url, CancellationToken cancellationToken);
+    Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken);
     Task UpdateStatusAsync(string url, bool processed, DateTime processingDate, CancellationToken cancellationToken);
 }

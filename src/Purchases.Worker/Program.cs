@@ -21,6 +21,7 @@ public class Program
 
         // Dependency Injection Setup for Services
         builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+        builder.Services.AddScoped<IReceiptService, ReceiptService>();
         builder.Services.AddScoped<IVendorService, VendorService>();
         builder.Services.AddScoped<IReceiptRetrieverService, ReceiptRetrieverService>();
         builder.Services.AddScoped<IMessageNotifier, TelegramMessageNotifier>();
@@ -29,6 +30,7 @@ public class Program
 
         // DI for Repos
         builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+        builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
 
         builder.Services.AddSingleton<IMongoClient>(sp =>

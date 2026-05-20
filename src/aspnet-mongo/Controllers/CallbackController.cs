@@ -40,12 +40,21 @@ namespace aspnet_mongo.Controllers
             [FromBody] string url,
             CancellationToken cancellationToken)
         {
-            if (!ValidUrl(url))
-                return BadRequest("Invalid URL");
+            try
+            {
+                if (!ValidUrl(url))
+                    return BadRequest("Invalid URL");
 
-            await _receiptRetrieverService.HandleReceiptUrl(url, default, cancellationToken);
+                await _receiptService.CreteAsync(url, cancellationToken);
+                await _receiptRetrieverService.HandleReceiptUrl(url, default, cancellationToken);
+                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, cancellationToken);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
         }
 
         private async Task TelegramServiceRouter(
@@ -59,7 +68,9 @@ namespace aspnet_mongo.Controllers
                 if (!ValidUrl(url))
                     throw new InvalidOperationException("Invalid URL");
 
+                await _receiptService.CreteAsync(url, cancellationToken);
                 await _receiptRetrieverService.HandleReceiptUrl(url, message?.Chat.Id ?? default, cancellationToken);
+                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, cancellationToken);
             }
             else if (message?.Photo != null)
             {

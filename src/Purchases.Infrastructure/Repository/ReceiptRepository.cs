@@ -42,6 +42,15 @@ public class ReceiptRepository : IReceiptRepository
         
         return receipt.FirstOrDefault(cancellationToken);
     }
+    
+    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken)
+    {
+        var selectedReceipts = await _receiptsCollection.FindAsync(
+            receipt => receipt.Processed ==  processed, 
+            cancellationToken: cancellationToken);
+
+        return await selectedReceipts.ToListAsync(cancellationToken);
+    }
 
     public async Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken)
     {

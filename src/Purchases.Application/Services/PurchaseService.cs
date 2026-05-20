@@ -31,6 +31,9 @@ namespace Purchases.Application.Services
 
         public async Task<Purchase?> GetAsync(string id, CancellationToken cancellationToken) =>
             await _purchaseRepository.GetAsync(id, cancellationToken);
+        
+        public async Task<Purchase> GetByUrlAsync(string url, CancellationToken cancellationToken) =>
+            await _purchaseRepository.GetByUrlAsync(url, cancellationToken);
 
         public async Task CreateAsync(PurchaseDto newPurchaseDto, CancellationToken cancellationToken)
         {

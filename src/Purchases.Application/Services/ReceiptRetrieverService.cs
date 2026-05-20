@@ -13,7 +13,6 @@ namespace Purchases.Application.Services
     public class ReceiptRetrieverService : IReceiptRetrieverService
     {
         private readonly IPurchaseService _purchaseService;
-        private readonly IReceiptService _receiptService;
         private readonly ILlmProcessor _llmProcessor;
         private readonly IMessageNotifier _messageNotifier;
         private readonly IRemoteFileManager _remoteFileManager;
@@ -22,7 +21,6 @@ namespace Purchases.Application.Services
 
         public ReceiptRetrieverService(
             IPurchaseService purchaseService,
-            IReceiptService receiptService,
             ILlmProcessor llmProcessor,
             IMessageNotifier messageNotifier,
             IRemoteFileManager remoteFileManager,
@@ -30,7 +28,6 @@ namespace Purchases.Application.Services
             IOptions<OpenAiSettings> openAiOptions)
         {
             _purchaseService = purchaseService;
-            _receiptService = receiptService;
             _llmProcessor = llmProcessor;
             _messageNotifier = messageNotifier;
             _remoteFileManager = remoteFileManager;
@@ -42,9 +39,6 @@ namespace Purchases.Application.Services
 
         public async Task<NfcReceipt> HandleReceiptUrl(string url, long messageId, CancellationToken cancellationToken)
         {
-            // Save receipt URL to processing control repository
-            await _receiptService.CreteAsync(url, cancellationToken);
-            
             var htmlContent = await RetrieveHtmlContent(url, messageId, cancellationToken);
             var systemPrompt = Resources.ExtractReceiptBasedOnUrlInfo;
             var userMessage = $"""  
@@ -79,7 +73,6 @@ namespace Purchases.Application.Services
             }
 
             await SavePurchaseAsync(nfcReceipt!, messageId, url, cancellationToken);
-            await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, cancellationToken);
 
             return nfcReceipt;
         }

@@ -6,5 +6,6 @@ public interface IReceiptRepository
 {
     Task CreateAsync(Receipt newReceipt, CancellationToken cancellationToken);
     Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken);
+    Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken);
     Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken);
 }

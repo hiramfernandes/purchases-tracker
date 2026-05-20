@@ -32,6 +32,13 @@ public class ReceiptService : IReceiptService
         return receipt;
     }
 
+    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken)
+    {
+        var receipts = await _repository.GetByStatusAsync(processed, cancellationToken);
+        
+        return receipts;
+    }
+
     public async Task UpdateStatusAsync(
         string url,
         bool processed,
