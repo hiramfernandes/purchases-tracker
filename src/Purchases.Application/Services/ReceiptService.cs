@@ -1,6 +1,7 @@
 using Purchases.Domain.Contracts.Repos;
 using Purchases.Domain.Contracts.Services;
 using Purchases.Domain.Models;
+using Purchases.Domain.Models.DTO.Receipt;
 
 namespace Purchases.Application.Services;
 
@@ -23,6 +24,15 @@ public class ReceiptService : IReceiptService
         };
 
         await _repository.CreateAsync(newReceipt, cancellationToken);
+    }
+
+    public async Task<IEnumerable<GetReceiptDto>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
+    {
+        var topNReceipts = await _repository.GetAllAsync(pageSize, cancellationToken);
+
+        var receiptsDto = topNReceipts.Select(MapFrom);
+
+        return receiptsDto;
     }
 
     public async Task<Receipt> GetByIdAsync(string url, CancellationToken cancellationToken)
@@ -54,5 +64,19 @@ public class ReceiptService : IReceiptService
         receiptFromDb.ProcessedDate = processingDate;
         
         await _repository.UpdateStatusAsync(receiptFromDb, cancellationToken);
+    }
+
+    private GetReceiptDto MapFrom(Receipt receipt)
+    {
+        if (receipt == null)
+            throw new ArgumentNullException("Invalid Receipt");
+
+        return new GetReceiptDto()
+        {
+            Url = receipt.Url,
+            Processed = receipt.Processed,
+            ReceivedDate = receipt.ReceivedDate?.ToString("yyyy/MM/dd"),
+            ProcessingMessage = receipt.ProcessingMessage,
+        };
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Purchases.Domain.Contracts.Repos;
 using Purchases.Domain.Models;
 using Purchases.Domain.Models.Settings;
@@ -8,9 +9,9 @@ namespace Purchases.Infrastructure.Repository;
 
 public class ReceiptRepository : IReceiptRepository
 {
-    private readonly string _collectionName = "receipts";
-
     private readonly IMongoCollection<Receipt> _receiptsCollection;
+
+    private readonly string _collectionName = "receipts";
 
     public ReceiptRepository(
         IOptions<MongoDbSettings> databaseSettings,
@@ -31,6 +32,15 @@ public class ReceiptRepository : IReceiptRepository
         };
 
         await _receiptsCollection.InsertOneAsync(newReceipt, options, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Receipt>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
+    {
+        var queryableCollection = _receiptsCollection.AsQueryable();
+        return await queryableCollection
+            .OrderByDescending(x => x.ReceivedDate)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken)
