@@ -9,7 +9,7 @@ namespace aspnet_mongo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[AllowAnonymous]
+[Authorize]
 public class ReceiptsController : ControllerBase
 {
     private readonly IReceiptService _receiptService;
