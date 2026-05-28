@@ -26,6 +26,19 @@ public class ReceiptService : IReceiptService
         await _repository.CreateAsync(newReceipt, cancellationToken);
     }
 
+    public async Task CreteAsync(string url, DateTime receivedDate, CancellationToken cancellationToken)
+    {
+        var newReceipt = new Receipt()
+        {
+            Url = url,
+            ReceivedDate = receivedDate,
+            ProcessedDate = receivedDate,
+            Processed = true
+        };
+        
+        await _repository.CreateAsync(newReceipt, cancellationToken);
+    }
+
     public async Task<IEnumerable<GetReceiptDto>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
     {
         var topNReceipts = await _repository.GetAllAsync(pageSize, cancellationToken);
@@ -75,7 +88,7 @@ public class ReceiptService : IReceiptService
         {
             Url = receipt.Url,
             Processed = receipt.Processed,
-            ReceivedDate = receipt.ReceivedDate?.ToString("yyyy/MM/dd"),
+            ReceivedDate = receipt.ReceivedDate?.ToString("dd/MM/yyyy"),
             ProcessingMessage = receipt.ProcessingMessage,
         };
     }
