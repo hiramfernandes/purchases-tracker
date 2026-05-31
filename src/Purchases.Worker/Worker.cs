@@ -85,13 +85,25 @@ namespace Purchases.Worker
                         if (string.IsNullOrWhiteSpace(purchase.PurchaseUrl))
                         {
                             // Remove the record due to lack of relevant data
-                            await _purchaseService.RemoveAsync(purchase.Id!);
+                            await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
                             
                             Debug.WriteLine($"Purchase removed: {purchase.Id} ({purchase.PurchaseDate})");
                             
                             continue;
                         }
-                        
+
+                        // Check for purchases without items/tags
+                        if (purchase.Items == null || 
+                            purchase.Items.Length == 0 ||
+                            purchase.Items.Any(x => x.Tags?.Length == 0))
+                        {
+                            // Remove purchase record and mark it as unprocessed if the record exists
+                            await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, stoppingToken);
+                            await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
+
+                            Debug.WriteLine($"Purchase record removed for URL {purchase.PurchaseUrl} ({purchase.VendorName} - {purchase.PurchaseDate}) ");
+                        }
+
                         // See if corresponding receipt exists
                         var existingReceipt = await _receiptService.GetByIdAsync(purchase.PurchaseUrl, stoppingToken);
 

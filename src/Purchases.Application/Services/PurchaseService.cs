@@ -95,8 +95,8 @@ namespace Purchases.Application.Services
         }
             
 
-        public async Task RemoveAsync(string id) =>
-            await _purchaseRepository.RemoveAsync(id);
+        public async Task RemoveAsync(string id, CancellationToken cancellationToken) =>
+            await _purchaseRepository.RemoveAsync(id, cancellationToken);
 
         private GetPurchaseDto MapFrom(Purchase purchase)
         {

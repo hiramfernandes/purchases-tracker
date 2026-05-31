@@ -20,3 +20,4 @@ x64/
 /src/aspnet-mongo/appsettings.Development.json
 src/Purchases.Worker/appsettings.Development.json
 appsettings.Development.json
+/src/Purchases.Worker/appsettings.Development.json

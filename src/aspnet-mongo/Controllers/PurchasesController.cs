@@ -88,7 +88,7 @@ namespace aspnet_mongo.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemovePurchase(string id, CancellationToken cancellationToken)
         {
-            await _purchasesService.RemoveAsync(id);
+            await _purchasesService.RemoveAsync(id, cancellationToken);
 
             return Ok();
         }

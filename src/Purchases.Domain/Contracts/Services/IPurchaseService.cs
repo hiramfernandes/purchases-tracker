@@ -9,6 +9,6 @@ public interface IPurchaseService
     Task<IEnumerable<GetPurchaseDto>> GetAllAsync(int pageSize, CancellationToken cancellationToken);
     Task<Purchase?> GetAsync(string id, CancellationToken cancellationToken);
     Task<Purchase> GetByUrlAsync(string url, CancellationToken cancellationToken);
-    Task RemoveAsync(string id);
+    Task RemoveAsync(string id, CancellationToken cancellationToken);
     Task UpdateAsync(string id, PurchaseDto purchaseDto, CancellationToken cancellationToken);
 }

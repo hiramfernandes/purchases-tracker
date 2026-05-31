@@ -65,7 +65,7 @@ public class ReceiptService : IReceiptService
     public async Task UpdateStatusAsync(
         string url,
         bool processed,
-        DateTime processingDate,
+        DateTime? processingDate,
         CancellationToken cancellationToken)
     {
         var receiptFromDb = await _repository.GetByIdAsync(url, cancellationToken);

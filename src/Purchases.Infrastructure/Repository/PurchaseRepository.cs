@@ -44,6 +44,6 @@ public class PurchaseRepository : IPurchaseRepository
     public async Task UpdateAsync(string id, Purchase updatedPurchase) =>
         await _purchasesCollection.ReplaceOneAsync(x => x.Id == id, updatedPurchase);
 
-    public async Task RemoveAsync(string id) =>
-        await _purchasesCollection.DeleteOneAsync(x => x.Id == id);
+    public async Task RemoveAsync(string id, CancellationToken cancellationToken) =>
+        await _purchasesCollection.DeleteOneAsync(x => x.Id == id, cancellationToken: cancellationToken);
 }
