@@ -66,6 +66,7 @@ public class ReceiptService : IReceiptService
         string url,
         bool processed,
         DateTime? processingDate,
+        string? processingMessage,
         CancellationToken cancellationToken)
     {
         var receiptFromDb = await _repository.GetByIdAsync(url, cancellationToken);
@@ -75,6 +76,7 @@ public class ReceiptService : IReceiptService
       
         receiptFromDb.Processed = processed;
         receiptFromDb.ProcessedDate = processingDate;
+        receiptFromDb.ProcessingMessage = processingMessage;
         
         await _repository.UpdateStatusAsync(receiptFromDb, cancellationToken);
     }

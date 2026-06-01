@@ -45,12 +45,12 @@ public class ReceiptRepository : IReceiptRepository
 
     public async Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken)
     {
-        var receipt = 
+        var receipts = 
             await _receiptsCollection.FindAsync(
                 receipt => receipt.Url == url, 
                 cancellationToken: cancellationToken);
-        
-        return receipt.FirstOrDefault(cancellationToken);
+
+        return receipts.FirstOrDefault(cancellationToken);
     }
     
     public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, int pageSize, CancellationToken cancellationToken)

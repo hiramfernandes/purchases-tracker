@@ -23,7 +23,6 @@ public class ReceiptsController : ControllerBase
     [Produces(typeof(List<GetReceiptDto>))]
     public async Task<IActionResult> GetReceipts(CancellationToken cancellationToken)
     {
-        // TODO: Move to appsettings
         var pageSize = 50;
 
         try
@@ -36,5 +35,27 @@ public class ReceiptsController : ControllerBase
         {
             return BadRequest(exc.Message);
         }
+    }
+
+    [HttpGet("url")]
+    [Produces(typeof(GetReceiptDto))]
+    public async Task<IActionResult> GetByUrl([FromQuery] string url, CancellationToken cancellationToken)
+    {
+        var receipt = await _receiptService.GetByIdAsync(url, cancellationToken);
+
+        return Ok(receipt);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateReceipt(UpdateReceiptDto updatedReceipt, CancellationToken cancellationToken)
+    {
+        await _receiptService.UpdateStatusAsync(
+            updatedReceipt.Url!,
+            updatedReceipt.Processed,
+            DateTime.UtcNow,
+            updatedReceipt.ProcessingMessage,
+            cancellationToken);
+
+        return Ok();
     }
 }

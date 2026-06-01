@@ -1,12 +1,14 @@
-using System.Text.Json.Serialization;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace Purchases.Domain.Models;
 
 public class Receipt
 {
     [BsonId]
-    [JsonPropertyName("url")]
+    [BsonRepresentation(BsonType.String)]
+    [JsonPropertyName("id")]
     public required string Url { get; set; }
 
     [JsonPropertyName("processed")]

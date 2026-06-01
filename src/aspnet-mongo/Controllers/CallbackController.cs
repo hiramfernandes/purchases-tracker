@@ -47,7 +47,7 @@ namespace aspnet_mongo.Controllers
 
                 await _receiptService.CreteAsync(url, cancellationToken);
                 await _receiptRetrieverService.HandleReceiptUrl(url, default, cancellationToken);
-                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, cancellationToken);
+                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, null, cancellationToken);
 
                 return Ok();
             }
@@ -70,7 +70,7 @@ namespace aspnet_mongo.Controllers
 
                 await _receiptService.CreteAsync(url, cancellationToken);
                 await _receiptRetrieverService.HandleReceiptUrl(url, message?.Chat.Id ?? default, cancellationToken);
-                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, cancellationToken);
+                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, null, cancellationToken);
             }
             else if (message?.Photo != null)
             {

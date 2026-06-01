@@ -63,6 +63,7 @@ namespace Purchases.Worker
                                     url: unprocessedReceipt.Url,
                                     processed: true,
                                     processingDate: DateTime.UtcNow,
+                                    processingMessage: null,
                                     cancellationToken: stoppingToken);
 
                                 continue;
@@ -70,7 +71,11 @@ namespace Purchases.Worker
 
                             await _receiptRetrieverService.HandleReceiptUrl(unprocessedReceipt.Url, default,
                                 stoppingToken);
-                            await _receiptService.UpdateStatusAsync(unprocessedReceipt.Url, true, DateTime.UtcNow,
+                            await _receiptService.UpdateStatusAsync(
+                                url: unprocessedReceipt.Url, 
+                                processed: true, 
+                                processingDate: DateTime.UtcNow,
+                                processingMessage: null,
                                 stoppingToken);
 
                             stopWatch.Stop();
@@ -120,9 +125,8 @@ namespace Purchases.Worker
                         {
                             try
                             {
-
                                 // Remove purchase record and mark it as unprocessed if the record exists
-                                await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, stoppingToken);
+                                await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, "Purchase record does not exist", stoppingToken);
                                 await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
                             }
                             catch (Exception exc)

@@ -8,14 +8,12 @@ namespace Purchases.Application.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _purchaseRepository;
-        //private readonly IVendorService _vendorService;
 
         public PurchaseService(
             IPurchaseRepository purchaseRepository,
             IVendorService vendorService)
         {
             _purchaseRepository = purchaseRepository;
-            //_vendorService = vendorService;
         }
 
         public async Task<IEnumerable<GetPurchaseDto>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
@@ -34,6 +32,13 @@ namespace Purchases.Application.Services
         
         public async Task<Purchase> GetByUrlAsync(string url, CancellationToken cancellationToken) =>
             await _purchaseRepository.GetByUrlAsync(url, cancellationToken);
+
+        public async Task<IEnumerable<GetPurchaseDto>> GetByTagAsync(string tag, CancellationToken cancellationToken)
+        {
+            var purchasesByTag = await _purchaseRepository.GetByTagAsync(tag, cancellationToken);
+
+            return purchasesByTag.Select(MapFrom);
+        }
 
         public async Task CreateAsync(PurchaseDto newPurchaseDto, CancellationToken cancellationToken)
         {
@@ -108,7 +113,6 @@ namespace Purchases.Application.Services
                 TotalAmount = purchase.TotalAmount,
                 VendorId = purchase?.VendorId,
                 VendorName = purchase?.VendorName,
-                //VendorLogoUrl = vendor?.LogoUrl,
                 Items = purchase?.Items?.Select(item =>
                     new PurchaseItemDto()
                     {

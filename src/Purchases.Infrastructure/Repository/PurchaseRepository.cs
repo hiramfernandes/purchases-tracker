@@ -38,6 +38,21 @@ public class PurchaseRepository : IPurchaseRepository
     public async Task<Purchase> GetByUrlAsync(string url, CancellationToken cancellationToken) =>
         await _purchasesCollection.Find(x => x.PurchaseUrl == url).FirstOrDefaultAsync(cancellationToken);
 
+
+    public async Task<IEnumerable<Purchase>> GetByTagAsync(string tag, CancellationToken cancellationToken)
+    {
+        var queryableCollection = _purchasesCollection.AsQueryable();
+        
+        var purchasesByTag = await queryableCollection
+            .OrderByDescending(x => x.PurchaseDate)
+            .Where(x => x.Items != null)
+            .Where(x => x.Items!.Length > 0)
+            .Where(x => x.Items!.Any(x => x.Tags != null && x.Tags.Any(t => t == tag)))
+            .ToListAsync(cancellationToken);
+
+        return purchasesByTag;
+    }
+
     public async Task CreateAsync(Purchase newPurchase) =>
         await _purchasesCollection.InsertOneAsync(newPurchase);
 

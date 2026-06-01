@@ -9,7 +9,7 @@ namespace aspnet_mongo.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-     public class PurchasesController : ControllerBase
+    public class PurchasesController : ControllerBase
     {
         private readonly IPurchaseService _purchasesService;
 
@@ -44,6 +44,24 @@ namespace aspnet_mongo.Controllers
             var purchase = await _purchasesService.GetAsync(id, cancellationToken);
 
             return Ok(purchase);
+        }
+
+        [HttpGet("tag/{tag}")]
+        [Produces(typeof(IEnumerable<GetPurchaseDto>))]
+        public async Task<IActionResult> GetByTag(string tag, CancellationToken cancellationToken)
+        {
+            var purchasesByTag = await _purchasesService.GetByTagAsync(tag, cancellationToken);
+
+            return Ok(purchasesByTag);
+        }
+
+        [HttpGet("url")]
+        [Produces(typeof(Purchase))]
+        public async Task<IActionResult> GetByUrl([FromQuery] string url, CancellationToken cancellationToken)
+        {
+            var purchaseByUrl = await _purchasesService.GetByUrlAsync(url, cancellationToken);
+            
+            return Ok(purchaseByUrl);
         }
 
         [HttpPut("{id}")]
