@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.4.11626.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Api", "aspnet-mongo\Purchases.Api.csproj", "{4A5D2494-2EE5-4D4E-946F-2D4AA68FE3E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Application", "Purchases.Application\Purchases.Application.csproj", "{BB142BFC-0BEE-4980-8613-23C5469DBD03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Domain", "Purchases.Domain\Purchases.Domain.csproj", "{BF6994FD-541F-44B2-A351-D2A87E80DEE7}"
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Worker", "Purchases.Worker\Purchases.Worker.csproj", "{64545AC6-F6E0-40B9-A302-38999932C759}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Api", "Purchase.Api\Purchases.Api.csproj", "{29B330D2-4DC4-5F77-C9B8-3719B1B584A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4A5D2494-2EE5-4D4E-946F-2D4AA68FE3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A5D2494-2EE5-4D4E-946F-2D4AA68FE3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A5D2494-2EE5-4D4E-946F-2D4AA68FE3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A5D2494-2EE5-4D4E-946F-2D4AA68FE3E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB142BFC-0BEE-4980-8613-23C5469DBD03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB142BFC-0BEE-4980-8613-23C5469DBD03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB142BFC-0BEE-4980-8613-23C5469DBD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{64545AC6-F6E0-40B9-A302-38999932C759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64545AC6-F6E0-40B9-A302-38999932C759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64545AC6-F6E0-40B9-A302-38999932C759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29B330D2-4DC4-5F77-C9B8-3719B1B584A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29B330D2-4DC4-5F77-C9B8-3719B1B584A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29B330D2-4DC4-5F77-C9B8-3719B1B584A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29B330D2-4DC4-5F77-C9B8-3719B1B584A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
