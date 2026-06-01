@@ -53,13 +53,14 @@ public class ReceiptRepository : IReceiptRepository
         return receipt.FirstOrDefault(cancellationToken);
     }
     
-    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, int pageSize, CancellationToken cancellationToken)
     {
-        var selectedReceipts = await _receiptsCollection.FindAsync(
-            receipt => receipt.Processed ==  processed, 
-            cancellationToken: cancellationToken);
+        var queryableCollection = _receiptsCollection.AsQueryable();
 
-        return await selectedReceipts.ToListAsync(cancellationToken);
+        return await queryableCollection.Where(receipt => receipt.Processed == false)
+            .OrderByDescending(r => r.ReceivedDate)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken)

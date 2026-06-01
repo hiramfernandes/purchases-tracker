@@ -34,24 +34,29 @@ namespace Purchases.Worker
                     {
                         // Retrieve unprocessed records (all at once)
                         var unprocessedReceipts = await _receiptService.GetByStatusAsync(
+                            pageSize: 50,
                             processed: false,
                             cancellationToken: stoppingToken);
 
                         foreach (var unprocessedReceipt in unprocessedReceipts)
                         {
+                            Debug.WriteLine("");
                             Debug.WriteLine($"URL: {unprocessedReceipt.Url}");
                             Debug.WriteLine($"Processed: {unprocessedReceipt.Processed}");
                             Debug.WriteLine($"Processing Date: {unprocessedReceipt.ProcessedDate}");
                             Debug.WriteLine($"Received Date: {unprocessedReceipt.ReceivedDate}");
 
+                            var stopWatch = new Stopwatch();
+                            stopWatch.Start();
+
                             // Validate
                             // Purchases record already exists
-                            var existingReceipt =
+                            var existingPurchase =
                                 await _purchaseService.GetByUrlAsync(unprocessedReceipt.Url, stoppingToken);
 
                             // Validate
                             // If exists does it properly contain Items
-                            if (existingReceipt is { Items.Length: > 0 })
+                            if (existingPurchase is { Items.Length: > 0 })
                             {
                                 // Mark it as processed
                                 await _receiptService.UpdateStatusAsync(
@@ -67,6 +72,9 @@ namespace Purchases.Worker
                                 stoppingToken);
                             await _receiptService.UpdateStatusAsync(unprocessedReceipt.Url, true, DateTime.UtcNow,
                                 stoppingToken);
+
+                            stopWatch.Stop();
+                            Debug.WriteLine($"Process took {stopWatch.Elapsed.TotalMilliseconds}ms for URL {unprocessedReceipt.Url}");
                         }
                     }
                     catch (Exception exc)
@@ -92,37 +100,46 @@ namespace Purchases.Worker
                             continue;
                         }
 
-                        // Check for purchases without items/tags
-                        if (purchase.Items == null || 
-                            purchase.Items.Length == 0 ||
-                            purchase.Items.Any(x => x.Tags?.Length == 0))
-                        {
-                            // Remove purchase record and mark it as unprocessed if the record exists
-                            await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, stoppingToken);
-                            await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
-
-                            Debug.WriteLine($"Purchase record removed for URL {purchase.PurchaseUrl} ({purchase.VendorName} - {purchase.PurchaseDate}) ");
-                        }
-
                         // See if corresponding receipt exists
                         var existingReceipt = await _receiptService.GetByIdAsync(purchase.PurchaseUrl, stoppingToken);
 
                         if (existingReceipt == null)
                         {
                             await _receiptService.CreteAsync(
-                                purchase.PurchaseUrl, 
-                                purchase.PurchaseDate ?? DateTime.UtcNow, 
+                                purchase.PurchaseUrl,
+                                purchase.PurchaseDate ?? DateTime.UtcNow,
                                 stoppingToken);
-                            
+
                             Debug.WriteLine($"Receipt created: {purchase.Id} ({purchase.PurchaseDate})");
                         }
+
+                        // Check for purchases without items/tags
+                        if (purchase.Items == null || 
+                            purchase.Items.Length == 0 ||
+                            purchase.Items.Any(x => x.Tags?.Length == 0))
+                        {
+                            try
+                            {
+
+                                // Remove purchase record and mark it as unprocessed if the record exists
+                                await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, stoppingToken);
+                                await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
+                            }
+                            catch (Exception exc)
+                            {
+                                Debug.WriteLine($"Error updating receipt and corresponding purchase - {purchase.PurchaseUrl}");
+                            }
+
+                            Debug.WriteLine($"Purchase record removed for URL {purchase.PurchaseUrl} ({purchase.VendorName} - {purchase.PurchaseDate}) ");
+                        }
+
                     }
 
                     // Edge cases:
                     // - Look for duplicates
                 }
 
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(10000, stoppingToken);
             }
         }
     }

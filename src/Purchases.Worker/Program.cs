@@ -47,6 +47,16 @@ public class Program
             client.Timeout = TimeSpan.FromSeconds(20);
         });
 
+        // Generic Scraper Client Setup
+        builder.Services.AddHttpClient("Scraper", client =>
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+            client.Timeout = TimeSpan.FromSeconds(20);
+        }).AddStandardResilienceHandler(options => {
+            options.Retry.MaxRetryAttempts = 3;
+            options.Retry.Delay = TimeSpan.FromSeconds(1);
+        });
+
         var host = builder.Build();
         host.Run();
     }

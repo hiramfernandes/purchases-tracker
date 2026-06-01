@@ -55,9 +55,9 @@ public class ReceiptService : IReceiptService
         return receipt;
     }
 
-    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, int pageSize, CancellationToken cancellationToken)
     {
-        var receipts = await _repository.GetByStatusAsync(processed, cancellationToken);
+        var receipts = await _repository.GetByStatusAsync(processed, pageSize, cancellationToken);
         
         return receipts;
     }

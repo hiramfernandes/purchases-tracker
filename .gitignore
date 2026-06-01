@@ -17,7 +17,6 @@ x64/
 /.vs/ProjectEvaluation/aspnet-mongo.metadata.v7.bin
 *.user
 *.bin
-/src/aspnet-mongo/appsettings.Development.json
 src/Purchases.Worker/appsettings.Development.json
 appsettings.Development.json
 /src/Purchases.Worker/appsettings.Development.json
