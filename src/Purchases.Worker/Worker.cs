@@ -40,11 +40,10 @@ namespace Purchases.Worker
 
                         foreach (var unprocessedReceipt in unprocessedReceipts)
                         {
-                            Debug.WriteLine("");
-                            Debug.WriteLine($"URL: {unprocessedReceipt.Url}");
+                            Debug.WriteLine($"\nURL: {unprocessedReceipt.Url}");
                             Debug.WriteLine($"Processed: {unprocessedReceipt.Processed}");
                             Debug.WriteLine($"Processing Date: {unprocessedReceipt.ProcessedDate}");
-                            Debug.WriteLine($"Received Date: {unprocessedReceipt.ReceivedDate}");
+                            Debug.WriteLine($"Received Date: {unprocessedReceipt.ReceivedDate} \n");
 
                             var stopWatch = new Stopwatch();
                             stopWatch.Start();
@@ -85,7 +84,7 @@ namespace Purchases.Worker
                                 stoppingToken);
 
                             stopWatch.Stop();
-                            Debug.WriteLine($"Process took {stopWatch.Elapsed.TotalMilliseconds}ms for URL {unprocessedReceipt.Url}");
+                            Debug.WriteLine($"Process took {stopWatch.Elapsed.TotalMilliseconds}ms for URL {unprocessedReceipt.Url} \n");
                         }
                     }
                     catch (Exception exc)
