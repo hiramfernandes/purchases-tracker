@@ -70,4 +70,9 @@ public class ReceiptRepository : IReceiptRepository
             receiptToUpdate, 
             cancellationToken: cancellationToken);
     }
+
+    public async Task DeleteAsync(string url, CancellationToken cancellationToken)
+    {
+        await _receiptsCollection.DeleteOneAsync(receipt => receipt.Url == url, cancellationToken);
+    }
 }

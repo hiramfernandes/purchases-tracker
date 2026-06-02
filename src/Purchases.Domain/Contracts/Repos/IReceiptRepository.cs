@@ -9,4 +9,5 @@ public interface IReceiptRepository
     Task<Receipt?> GetByIdAsync(string url, CancellationToken cancellationToken);
     Task<IEnumerable<Receipt>> GetByStatusAsync(bool processed, int pageSize, CancellationToken cancellationToken);
     Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken);
+    Task DeleteAsync(string url, CancellationToken cancellationToken);
 }

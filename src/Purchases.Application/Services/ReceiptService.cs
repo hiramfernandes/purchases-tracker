@@ -81,6 +81,11 @@ public class ReceiptService : IReceiptService
         await _repository.UpdateStatusAsync(receiptFromDb, cancellationToken);
     }
 
+    public async Task DeleteAsync(string url, CancellationToken cancellationToken)
+    {
+        await _repository.DeleteAsync(url, cancellationToken);
+    }
+
     private GetReceiptDto MapFrom(Receipt receipt)
     {
         if (receipt == null)

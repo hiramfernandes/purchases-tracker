@@ -136,6 +136,10 @@ namespace Purchases.Application.Services
             CancellationToken cancellationToken)
         {
             var vendorName = obtainedReceiptData!.Merchant?.LegalName ?? obtainedReceiptData.Merchant?.TradeName;
+            var vendorId = obtainedReceiptData!.Merchant?.Cnpj?
+                .Replace(".", string.Empty)
+                .Replace("/", string.Empty)
+                .Replace("-", string.Empty);
 
             if (!DateTime.TryParse(obtainedReceiptData?.Transaction?.IssueDatetime, out var purchaseDate))
             {
@@ -148,7 +152,7 @@ namespace Purchases.Application.Services
                 PurchaseDate = purchaseDate.Date,
                 Url = url ?? obtainedReceiptData?.Qr?.Url,
                 VendorName = vendorName,
-                VendorId = null,
+                VendorId = vendorId,
                 TotalAmount = obtainedReceiptData!.Totals?.Total,
                 Items = obtainedReceiptData!.Items?.Select(item =>
                     new PurchaseItemDto()

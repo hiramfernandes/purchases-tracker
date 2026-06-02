@@ -50,6 +50,12 @@ namespace Purchases.Worker
                             stopWatch.Start();
 
                             // Validate
+                            if (!Uri.TryCreate(unprocessedReceipt.Url, UriKind.Absolute, out _))
+                            {
+                                await _receiptService.DeleteAsync(unprocessedReceipt.Url,  stoppingToken);
+                                continue;
+                            }
+                            
                             // Purchases record already exists
                             var existingPurchase =
                                 await _purchaseService.GetByUrlAsync(unprocessedReceipt.Url, stoppingToken);
@@ -129,7 +135,7 @@ namespace Purchases.Worker
                                 await _receiptService.UpdateStatusAsync(purchase.PurchaseUrl, false, null, "Purchase record does not exist", stoppingToken);
                                 await _purchaseService.RemoveAsync(purchase.Id!, stoppingToken);
                             }
-                            catch (Exception exc)
+                            catch (Exception)
                             {
                                 Debug.WriteLine($"Error updating receipt and corresponding purchase - {purchase.PurchaseUrl}");
                             }
