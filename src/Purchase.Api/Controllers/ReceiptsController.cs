@@ -20,10 +20,10 @@ public class ReceiptsController : ControllerBase
     }
 
     [HttpGet]
-    [Produces(typeof(List<GetReceiptDto>))]
+    [Produces(typeof(IEnumerable<GetReceiptDto>))]
     public async Task<IActionResult> GetReceipts(CancellationToken cancellationToken)
     {
-        var pageSize = 50;
+        var pageSize = 80;
 
         try
         {
@@ -35,6 +35,20 @@ public class ReceiptsController : ControllerBase
         {
             return BadRequest(exc.Message);
         }
+    }
+
+    [HttpGet("status")]
+    [Produces(typeof(IEnumerable<GetReceiptDto>))]
+    public async Task<IActionResult> GetReceiptsByStatusAsync(bool processed, CancellationToken cancellationToken)
+    {
+        var pageSize = 80;
+
+        var results = await _receiptService.GetByStatusAsync(
+            processed,
+            pageSize,
+            cancellationToken);
+
+        return Ok(results);
     }
 
     [HttpGet("url")]

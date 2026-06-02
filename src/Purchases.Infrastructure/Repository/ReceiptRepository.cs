@@ -57,10 +57,10 @@ public class ReceiptRepository : IReceiptRepository
     {
         var queryableCollection = _receiptsCollection.AsQueryable();
 
-        return await queryableCollection.Where(receipt => receipt.Processed == false)
+        return await queryableCollection.Where(receipt => receipt.Processed == processed)
             .OrderByDescending(r => r.ReceivedDate)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
     public async Task UpdateStatusAsync(Receipt receiptToUpdate, CancellationToken cancellationToken)
