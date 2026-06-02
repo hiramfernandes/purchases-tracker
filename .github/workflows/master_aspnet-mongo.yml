@@ -50,7 +50,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Purchase.Api'
+          app-name: 'aspnet-mongo'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_14CAC8E52FDB4FAD9F9A2A0ED98200F8 }}
           package: .
