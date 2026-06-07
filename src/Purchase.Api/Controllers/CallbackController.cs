@@ -45,7 +45,10 @@ namespace aspnet_mongo.Controllers
                 if (!ValidUrl(url))
                     return BadRequest("Invalid URL");
 
-                await _receiptService.CreteAsync(url, cancellationToken);
+                var existingReceipt = await _receiptService.GetByIdAsync(url, cancellationToken);
+                if (existingReceipt == null)
+                    await _receiptService.CreteAsync(url, cancellationToken);
+
                 await _receiptRetrieverService.HandleReceiptUrl(url, default, cancellationToken);
                 await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, null, cancellationToken);
 
