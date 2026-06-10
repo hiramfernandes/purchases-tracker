@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Purchases.Domain.Serializers;
+using System.Text.Json.Serialization;
 
 namespace Purchases.Domain.Models;
 
@@ -120,6 +121,7 @@ public class Transaction
     public string? Model { get; set; }
 
     [JsonPropertyName("nfce_number")]
+    [JsonConverter(typeof(StringOrIntConverter))]
     public string? NfceNumber { get; set; }
 
     [JsonPropertyName("series")]
