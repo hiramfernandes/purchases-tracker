@@ -23,7 +23,7 @@ public class ReceiptsController : ControllerBase
     [Produces(typeof(IEnumerable<GetReceiptDto>))]
     public async Task<IActionResult> GetReceipts(CancellationToken cancellationToken)
     {
-        var pageSize = 80;
+        var pageSize = 50;
 
         try
         {
@@ -41,7 +41,7 @@ public class ReceiptsController : ControllerBase
     [Produces(typeof(IEnumerable<GetReceiptDto>))]
     public async Task<IActionResult> GetReceiptsByStatusAsync(bool processed, CancellationToken cancellationToken)
     {
-        var pageSize = 80;
+        var pageSize = 50;
 
         var results = await _receiptService.GetByStatusAsync(
             processed,

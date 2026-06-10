@@ -70,51 +70,6 @@ public class Qr
     public string? FallbackSource { get; set; }
 }
 
-public class Merchant
-{
-    [JsonPropertyName("legal_name")]
-    public string? LegalName { get; set; }
-
-    [JsonPropertyName("trade_name")]
-    public string? TradeName { get; set; }
-
-    [JsonPropertyName("cnpj")]
-    public string? Cnpj { get; set; }
-
-    [JsonPropertyName("ie")]
-    public string? Ie { get; set; }
-
-    [JsonPropertyName("im")]
-    public string? Im { get; set; }
-
-    [JsonPropertyName("address")]
-    public Address? Address { get; set; }
-}
-
-public class Address
-{
-    [JsonPropertyName("street")]
-    public string? Street { get; set; }
-
-    [JsonPropertyName("number")]
-    public string? Number { get; set; }
-
-    [JsonPropertyName("neighborhood")]
-    public string? Neighborhood { get; set; }
-
-    [JsonPropertyName("city")]
-    public string? City { get; set; }
-
-    [JsonPropertyName("state")]
-    public string? State { get; set; }
-
-    [JsonPropertyName("zip")]
-    public string? Zip { get; set; }
-
-    [JsonPropertyName("country")]
-    public string? Country { get; set; }
-}
-
 public class Transaction
 {
     [JsonPropertyName("model")]
