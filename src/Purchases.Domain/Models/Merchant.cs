@@ -1,3 +1,5 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
 namespace Purchases.Domain.Models;
@@ -10,7 +12,8 @@ public class Merchant
     [JsonPropertyName("trade_name")]
     public string? TradeName { get; set; }
 
-    [JsonPropertyName("cnpj")]
+    [JsonPropertyName("id")]
+    [BsonRepresentation(BsonType.String)]
     public string? Cnpj { get; set; }
 
     [JsonPropertyName("ie")]

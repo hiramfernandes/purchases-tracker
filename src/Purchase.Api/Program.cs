@@ -51,12 +51,14 @@ public class Program
         builder.Services.AddScoped<IMessageNotifier, TelegramMessageNotifier>();
         builder.Services.AddScoped<IRemoteFileManager, TelegramRemoteFileManager>();
         builder.Services.AddScoped<ILlmProcessor, LlmProcessor>();
+        builder.Services.AddScoped<IMerchantService, MerchantService>();        
 
         // DI for Repos
         builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
         builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
-        
+        builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
+
         builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("PurchasesDatabase"));
         builder.Services.Configure<TelegramIntegrationSettings>(builder.Configuration.GetSection("TelegramIntegration"));
         builder.Services.Configure<OpenAiSettings>(builder.Configuration.GetSection("OpenAiIntegration"));
