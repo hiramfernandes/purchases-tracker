@@ -66,20 +66,27 @@ public class ReceiptMerchant
 
 public class Transaction
 {
-    [JsonPropertyName("model")] public string? Model { get; set; }
+    [JsonPropertyName("model")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? Model { get; set; }
 
     [JsonPropertyName("nfce_number")]
     [JsonConverter(typeof(StringOrIntConverter))]
     public string? NfceNumber { get; set; }
 
-    [JsonPropertyName("series")] public string? Series { get; set; }
+    [JsonPropertyName("series")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? Series { get; set; }
 
-    [JsonPropertyName("access_key_44")] public string? AccessKey44 { get; set; }
+    [JsonPropertyName("access_key_44")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? AccessKey44 { get; set; }
 
     [JsonPropertyName("access_key_decomposed")]
     public AccessKeyDecomposed? AccessKeyDecomposed { get; set; }
 
-    [JsonPropertyName("issue_datetime")] public string? IssueDatetime { get; set; }
+    [JsonPropertyName("issue_datetime")]
+    public string? IssueDatetime { get; set; }
 
     [JsonPropertyName("authorization_protocol")]
     public string? AuthorizationProtocol { get; set; }
@@ -87,17 +94,27 @@ public class Transaction
     [JsonPropertyName("authorization_datetime")]
     public DateTime? AuthorizationDatetime { get; set; }
 
-    [JsonPropertyName("environment")] public string? Environment { get; set; }
+    [JsonPropertyName("environment")]
+    public string? Environment { get; set; }
 
-    [JsonPropertyName("xml_version")] public string? XmlVersion { get; set; }
+    [JsonPropertyName("xml_version")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? XmlVersion { get; set; }
 
-    [JsonPropertyName("xslt_version")] public string? XsltVersion { get; set; }
+    [JsonPropertyName("xslt_version")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? XsltVersion { get; set; }
 
-    [JsonPropertyName("terminal")] public string? Terminal { get; set; }
+    [JsonPropertyName("terminal")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? Terminal { get; set; }
 
-    [JsonPropertyName("pos_id")] public string? PosId { get; set; }
+    [JsonPropertyName("pos_id")]
+    [JsonConverter(typeof(StringOrIntConverter))]
+    public string? PosId { get; set; }
 
-    [JsonPropertyName("operator")] public string? Operator { get; set; }
+    [JsonPropertyName("operator")]
+    public string? Operator { get; set; }
 
     [JsonPropertyName("consumer_identified")]
     public bool? ConsumerIdentified { get; set; }
