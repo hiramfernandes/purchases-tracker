@@ -6,7 +6,7 @@ public interface IMerchantService
 {
     Task CreateAsync(Merchant newMerchant, CancellationToken cancellationToken);
     Task<IEnumerable<Merchant>> GetAllAsync(int pageSize, CancellationToken cancellationToken);
-    Task<Purchase?> GetAsync(string id, CancellationToken cancellationToken);
+    Task<Merchant?> GetAsync(string id, CancellationToken cancellationToken);
     Task RemoveAsync(string id, CancellationToken cancellationToken);
     Task UpdateAsync(string id, Merchant merchant, CancellationToken cancellationToken);
 }

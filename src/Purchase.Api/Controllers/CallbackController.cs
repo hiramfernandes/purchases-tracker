@@ -19,7 +19,7 @@ namespace aspnet_mongo.Controllers
 
         [HttpPost("telegram")]
         public async Task<IActionResult> TelegramWebhook(
-            [FromBody] Update update, 
+            [FromBody] Update update,
             CancellationToken cancellationToken)
         {
             try
@@ -45,12 +45,14 @@ namespace aspnet_mongo.Controllers
                 if (!ValidUrl(url))
                     return BadRequest("Invalid URL");
 
-                var existingReceipt = await _receiptService.GetByIdAsync(url, cancellationToken);
-                if (existingReceipt == null)
-                    await _receiptService.CreteAsync(url, cancellationToken);
+                var decodedUrl = Uri.UnescapeDataString(url);
 
-                await _receiptRetrieverService.HandleReceiptUrl(url, default, cancellationToken);
-                await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, null, cancellationToken);
+                var existingReceipt = await _receiptService.GetByIdAsync(decodedUrl, cancellationToken);
+                if (existingReceipt == null)
+                    await _receiptService.CreteAsync(decodedUrl, cancellationToken);
+
+                await _receiptRetrieverService.HandleReceiptUrl(decodedUrl, default, cancellationToken);
+                await _receiptService.UpdateStatusAsync(decodedUrl, true, DateTime.UtcNow, null, cancellationToken);
 
                 return Ok();
             }
@@ -71,7 +73,10 @@ namespace aspnet_mongo.Controllers
                 if (!ValidUrl(url))
                     throw new InvalidOperationException("Invalid URL");
 
-                await _receiptService.CreteAsync(url, cancellationToken);
+                var existingReceipt = await _receiptService.GetByIdAsync(url, cancellationToken);
+                if (existingReceipt == null)
+                    await _receiptService.CreteAsync(url, cancellationToken);
+
                 await _receiptRetrieverService.HandleReceiptUrl(url, message?.Chat.Id ?? default, cancellationToken);
                 await _receiptService.UpdateStatusAsync(url, true, DateTime.UtcNow, null, cancellationToken);
             }

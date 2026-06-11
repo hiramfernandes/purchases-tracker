@@ -15,13 +15,7 @@ public class Merchant
     [JsonPropertyName("id")]
     [BsonRepresentation(BsonType.String)]
     public string? Cnpj { get; set; }
-
-    [JsonPropertyName("ie")]
-    public string? Ie { get; set; }
-
-    [JsonPropertyName("im")]
-    public string? Im { get; set; }
-
+    
     [JsonPropertyName("address")]
     public Address? Address { get; set; }
 }

@@ -25,9 +25,9 @@ public class MerchantService : IMerchantService
         return merchants;
     }
 
-    public async Task<Purchase?> GetAsync(string id, CancellationToken cancellationToken)
+    public async Task<Merchant?> GetAsync(string id, CancellationToken cancellationToken)
     {
-        var merchant = await GetAsync(id, cancellationToken);
+        var merchant = await _merchantRepository.GetAsync(id, cancellationToken);
 
         return merchant;
     }

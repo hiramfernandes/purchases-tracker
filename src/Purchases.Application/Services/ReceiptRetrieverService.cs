@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.ComponentModel;
+using Microsoft.Extensions.Options;
 using Purchases.Application.Properties;
 using Purchases.Domain.Contracts.Services;
 using Purchases.Domain.Models;
@@ -16,6 +17,7 @@ namespace Purchases.Application.Services
         private readonly ILlmProcessor _llmProcessor;
         private readonly IMessageNotifier _messageNotifier;
         private readonly IRemoteFileManager _remoteFileManager;
+        private readonly IMerchantService _merchantService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly OpenAiSettings _openAiSettings;
 
@@ -24,6 +26,7 @@ namespace Purchases.Application.Services
             ILlmProcessor llmProcessor,
             IMessageNotifier messageNotifier,
             IRemoteFileManager remoteFileManager,
+            IMerchantService merchantService,
             IHttpClientFactory httpClientFactory,
             IOptions<OpenAiSettings> openAiOptions)
         {
@@ -31,6 +34,7 @@ namespace Purchases.Application.Services
             _llmProcessor = llmProcessor;
             _messageNotifier = messageNotifier;
             _remoteFileManager = remoteFileManager;
+            _merchantService = merchantService;
             _httpClientFactory = httpClientFactory;
             _openAiSettings = openAiOptions.Value;
         }
@@ -73,6 +77,7 @@ namespace Purchases.Application.Services
             }
 
             await SavePurchaseAsync(nfcReceipt!, messageId, url, cancellationToken);
+            await ManageMerchant(nfcReceipt.Merchant!, cancellationToken);
 
             return nfcReceipt;
         }
@@ -136,10 +141,7 @@ namespace Purchases.Application.Services
             CancellationToken cancellationToken)
         {
             var vendorName = obtainedReceiptData!.Merchant?.LegalName ?? obtainedReceiptData.Merchant?.TradeName;
-            var vendorId = obtainedReceiptData!.Merchant?.Cnpj?
-                .Replace(".", string.Empty)
-                .Replace("/", string.Empty)
-                .Replace("-", string.Empty);
+            var vendorId = NumbersOnly(obtainedReceiptData!.Merchant?.Cnpj!);
 
             if (!DateTime.TryParse(obtainedReceiptData?.Transaction?.IssueDatetime, out var purchaseDate))
             {
@@ -189,6 +191,36 @@ namespace Purchases.Application.Services
             var htmlContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
             return htmlContent;
+        }
+
+        private async Task ManageMerchant(ReceiptMerchant receiptMerchant, CancellationToken cancellationToken)
+        {
+            if (receiptMerchant is null or { Cnpj: null })
+                throw new InvalidEnumArgumentException(nameof(receiptMerchant));
+
+            // See if already exists
+            var existingMerchant = await _merchantService.GetAsync(receiptMerchant.Cnpj, cancellationToken);
+
+            if (existingMerchant != null)
+                return;
+
+            // Move to Service and accept ReceiptMerchant as input parameter
+            var merchant = new Merchant()
+            {
+                Cnpj = NumbersOnly(receiptMerchant.Cnpj),
+                Address = receiptMerchant.Address,
+                LegalName = receiptMerchant.LegalName
+            };
+
+            await _merchantService.CreateAsync(merchant, cancellationToken);
+        }
+
+        private string NumbersOnly(string cnpj)
+        {
+            return cnpj
+                .Replace(".", string.Empty)
+                .Replace("/", string.Empty)
+                .Replace("-", string.Empty);
         }
     }
 }
