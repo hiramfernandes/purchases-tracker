@@ -15,7 +15,7 @@ namespace aspnet_mongo.Controllers
             _merchantService = merchantService;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Produces(typeof(Merchant))]
         public async Task<IActionResult> GetMerchant([FromRoute] string id, CancellationToken cancellationToken)
         {
@@ -23,6 +23,15 @@ namespace aspnet_mongo.Controllers
 
             return Ok(merchant);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMerchants(CancellationToken cancellationToken)
+        {
+            var merchants = await _merchantService.GetAllAsync(20,  cancellationToken);
+            
+            return Ok(merchants);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateMerchant([FromBody] Merchant merchant, CancellationToken cancellationToken)

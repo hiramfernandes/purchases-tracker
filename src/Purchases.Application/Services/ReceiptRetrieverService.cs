@@ -196,10 +196,10 @@ namespace Purchases.Application.Services
         private async Task ManageMerchant(ReceiptMerchant receiptMerchant, CancellationToken cancellationToken)
         {
             if (receiptMerchant is null or { Cnpj: null })
-                throw new InvalidEnumArgumentException(nameof(receiptMerchant));
+                return;
 
             // See if already exists
-            var existingMerchant = await _merchantService.GetAsync(receiptMerchant.Cnpj, cancellationToken);
+            var existingMerchant = await _merchantService.GetAsync(NumbersOnly(receiptMerchant.Cnpj), cancellationToken);
 
             if (existingMerchant != null)
                 return;

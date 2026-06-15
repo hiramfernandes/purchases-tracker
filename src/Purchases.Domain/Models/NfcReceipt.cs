@@ -132,6 +132,7 @@ public class AccessKeyDecomposed
 
     [JsonPropertyName("serie")] public string? Serie { get; set; }
 
+    [JsonConverter(typeof(StringOrIntConverter))]
     [JsonPropertyName("nNF")] public string? NNF { get; set; }
 }
 

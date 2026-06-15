@@ -23,6 +23,8 @@ public class Program
         builder.Services.AddScoped<IPurchaseService, PurchaseService>();
         builder.Services.AddScoped<IReceiptService, ReceiptService>();
         builder.Services.AddScoped<IVendorService, VendorService>();
+        builder.Services.AddScoped<IMerchantService, MerchantService>();
+        
         builder.Services.AddScoped<IReceiptRetrieverService, ReceiptRetrieverService>();
         builder.Services.AddScoped<IMessageNotifier, TelegramMessageNotifier>();
         builder.Services.AddScoped<IRemoteFileManager, TelegramRemoteFileManager>();
@@ -32,6 +34,7 @@ public class Program
         builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
         builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
         builder.Services.AddScoped<IVendorRepository, VendorRepository>();
+        builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
 
         builder.Services.AddSingleton<IMongoClient>(sp =>
         {

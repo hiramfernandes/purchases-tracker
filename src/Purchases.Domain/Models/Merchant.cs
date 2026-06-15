@@ -12,9 +12,10 @@ public class Merchant
     [JsonPropertyName("trade_name")]
     public string? TradeName { get; set; }
 
+    [BsonId]
     [JsonPropertyName("id")]
     [BsonRepresentation(BsonType.String)]
-    public string? Cnpj { get; set; }
+    public string? Cnpj { get; init; }
     
     [JsonPropertyName("address")]
     public Address? Address { get; set; }
