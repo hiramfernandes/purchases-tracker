@@ -1,6 +1,7 @@
 using Purchases.Domain.Contracts.Repos;
 using Purchases.Domain.Contracts.Services;
 using Purchases.Domain.Models;
+using Purchases.Domain.Models.DTO.Merchant;
 
 namespace Purchases.Application.Services;
 
@@ -18,18 +19,19 @@ public class MerchantService : IMerchantService
         await _merchantRepository.CreateAsync(newMerchant, cancellationToken);
     }
 
-    public async Task<IEnumerable<Merchant>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetMerchantDto>> GetAllAsync(int pageSize, CancellationToken cancellationToken)
     {
         var merchants = await _merchantRepository.GetAllAsync(pageSize, cancellationToken);
 
-        return merchants;
+        return merchants.Select(MapFrom);
     }
 
-    public async Task<Merchant?> GetAsync(string id, CancellationToken cancellationToken)
+    public async Task<GetMerchantDto?> GetAsync(string id, CancellationToken cancellationToken)
     {
         var merchant = await _merchantRepository.GetAsync(id, cancellationToken);
+        var output = MapFrom(merchant);
 
-        return merchant;
+        return output;
     }
 
     public Task RemoveAsync(string id, CancellationToken cancellationToken)
@@ -40,5 +42,16 @@ public class MerchantService : IMerchantService
     public Task UpdateAsync(string id, Merchant merchant, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    private GetMerchantDto MapFrom(Merchant merchant)
+    {
+        return new GetMerchantDto()
+        {
+            LegalName =  merchant.LegalName,
+            TradeName = merchant.TradeName,
+            Cnpj = merchant.Cnpj,
+            Address = merchant.Address,
+        };
     }
 }
