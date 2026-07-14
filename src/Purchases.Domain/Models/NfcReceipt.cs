@@ -191,13 +191,13 @@ public class Item
 
     [JsonPropertyName("product_code_raw")] public string? ProductCodeRaw { get; set; }
 
-    [JsonPropertyName("quantity")] public double? Quantity { get; set; }
+    [JsonPropertyName("quantity")] public decimal? Quantity { get; set; }
 
     [JsonPropertyName("unit")] public string? Unit { get; set; }
 
-    [JsonPropertyName("unit_price")] public double? UnitPrice { get; set; }
+    [JsonPropertyName("unit_price")] public decimal? UnitPrice { get; set; }
 
-    [JsonPropertyName("total_price")] public double? TotalPrice { get; set; }
+    [JsonPropertyName("total_price")] public decimal? TotalPrice { get; set; }
 
     [JsonPropertyName("discount")] public string? Discount { get; set; }
 

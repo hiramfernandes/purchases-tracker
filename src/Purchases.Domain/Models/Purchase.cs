@@ -45,7 +45,15 @@ public class PurchaseItem
 
     [DataMember]
     [BsonElement("unitPrice")]
-    public float? UnitPrice { get; set; }
+    public decimal? UnitPrice { get; set; }
+
+    [DataMember]
+    [BsonElement("quantity")]
+    public decimal? Quantity { get; set; }
+
+    [DataMember]
+    [BsonElement("total_price")]
+    public decimal? TotalPrice { get; set; }
 
     [DataMember]
     [BsonElement("tags")]

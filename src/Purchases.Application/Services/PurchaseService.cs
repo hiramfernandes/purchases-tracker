@@ -62,6 +62,8 @@ namespace Purchases.Application.Services
                     {
                         Description = item.Description,
                         UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        TotalPrice = item.TotalPrice,
                         Tags = item.Tags
                     })
                 .ToArray(),
@@ -90,6 +92,8 @@ namespace Purchases.Application.Services
                     {
                         Description = item.Description,
                         UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        TotalPrice = item.TotalPrice,
                         Tags = item.Tags
                     })
                 .ToArray();
@@ -117,6 +121,8 @@ namespace Purchases.Application.Services
                     new PurchaseItemDto()
                     {
                         Description = item.Description,
+                        Quantity = item.Quantity,
+                        TotalPrice = item.TotalPrice,
                         UnitPrice = item.UnitPrice,
                         Tags = item.Tags
                     }

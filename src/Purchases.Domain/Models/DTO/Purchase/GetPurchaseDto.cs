@@ -21,6 +21,8 @@ public class GetPurchaseDto
 public class PurchaseItemDto
 {
     public string? Description { get; set; }
-    public float? UnitPrice { get; set; }
+    public decimal? UnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
+    public decimal? TotalPrice { get; set; }
     public string[]? Tags { get; set; }
 }

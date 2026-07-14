@@ -160,8 +160,10 @@ namespace Purchases.Application.Services
                     new PurchaseItemDto()
                     {
                         Description = item.DescriptionRaw,
+                        Quantity = item.Quantity,
                         Tags = item.Tags?.ToArray(),
-                        UnitPrice = (float?)item.UnitPrice
+                        UnitPrice = item.UnitPrice,
+                        TotalPrice = item.TotalPrice,
                     }
                 ).ToArray(),
             };
