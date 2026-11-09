@@ -29,9 +29,10 @@ public class MerchantService : IMerchantService
     public async Task<GetMerchantDto?> GetAsync(string id, CancellationToken cancellationToken)
     {
         var merchant = await _merchantRepository.GetAsync(id, cancellationToken);
-        var output = MapFrom(merchant);
+        if (merchant != null)
+            return MapFrom(merchant);
 
-        return output;
+        return null;
     }
 
     public Task RemoveAsync(string id, CancellationToken cancellationToken)
@@ -46,6 +47,9 @@ public class MerchantService : IMerchantService
 
     private GetMerchantDto MapFrom(Merchant merchant)
     {
+        if (merchant == null) 
+            throw new ArgumentNullException(nameof(merchant));
+
         return new GetMerchantDto()
         {
             LegalName =  merchant.LegalName,
